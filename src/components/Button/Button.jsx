@@ -1,6 +1,6 @@
-export default function Button() {
+export default function Button({ onLoadMore }) {
   return (
-    <button className="Button" type="button">
+    <button className="Button" type="button" onClick={() => onLoadMore()}>
       load more
     </button>
   );
