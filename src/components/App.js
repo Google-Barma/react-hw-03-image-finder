@@ -2,55 +2,47 @@ import { Component } from 'react';
 
 import SearchBar from './SearchBar/SearchBar';
 import ImageGallery from './ImageGallery/ImageGallery';
-import ImageGalleryItem from './ImageGalleryItem/ImageGalleryItem';
-import galleryApi from '../services/galleryApi';
+import galleryApi from '../services/gallery-api';
+import Button from './Button/Button';
 
 export default class App extends Component {
   state = {
-    page: 1,
-    query: '',
     gallery: [],
+    page: 1,
+    searchQuery: '',
   };
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   const { page, query } = this.state;
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.searchQuery !== this.state.searchQuery) {
+      this.fetchGallery();
+    }
+  }
 
-  //   if (prevState.query !== query) {
-  //   }
-  // }
+  fetchGallery = () => {
+    const { page, searchQuery } = this.state;
 
-  fetchData = () => {
-    const { page, query } = this.state;
-
-    galleryApi.fetchGallery(query, page).then(res => {
-      this.setState(prevState => ({ gallery: [...prevState.gallery, ...res] }));
-      console.log(this.state.gallery);
+    galleryApi.fetchGallery(searchQuery, page).then(images => {
+      this.setState(prevState => ({
+        gallery: [...prevState.gallery, ...images],
+        page: prevState.page + 1,
+      }));
     });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-
-    this.fetchData();
-  };
-
-  handleChangeQuery = e => {
-    const query = e.currentTarget.value;
-
-    this.setState({ query: query });
+  onChangeQuery = query => {
+    this.setState({ searchQuery: query });
   };
 
   render() {
+    const { gallery } = this.state;
+
     return (
       <>
-        <SearchBar
-          onSubmitForm={this.handleSubmit}
-          onChangeQuery={this.handleChangeQuery}
-        />
+        <SearchBar onSubmitForm={this.onChangeQuery} />
         <main>
-          <ImageGallery>
-            <ImageGalleryItem />
-          </ImageGallery>
+          <ImageGallery galleryPhotos={gallery} />
+
+          {gallery.length > 0 && <Button />}
         </main>
       </>
     );
