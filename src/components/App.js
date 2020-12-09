@@ -11,7 +11,8 @@ export default class App extends Component {
     gallery: [],
     page: 1,
     searchQuery: '',
-    isOpenModal: false,
+    showModal: false,
+    modalImageUrl: '',
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -23,6 +24,10 @@ export default class App extends Component {
       this.scrollToNextPage();
     }
   }
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
+  };
 
   fetchGallery = () => {
     const { page, searchQuery } = this.state;
@@ -41,8 +46,19 @@ export default class App extends Component {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
+  handleOpenModal = e => {
+    const url = e.target.dataset.url;
+
+    this.toggleModal();
+
+    this.setState({ modalImageUrl: url });
+  };
+
   onChangeQuery = query => {
-    this.setState({ searchQuery: query, gallery: [] });
+    this.setState({
+      searchQuery: query,
+      gallery: [],
+    });
   };
 
   scrollToNextPage = () => {
@@ -53,17 +69,22 @@ export default class App extends Component {
   };
 
   render() {
-    const { gallery, isOpenModal } = this.state;
+    const { gallery, showModal, modalImageUrl } = this.state;
 
     return (
       <>
         <SearchBar onSubmitForm={this.onChangeQuery} />
         <main>
-          <ImageGallery galleryPhotos={gallery} />
+          <ImageGallery
+            galleryPhotos={gallery}
+            onOpenModal={this.handleOpenModal}
+          />
 
           {gallery.length > 0 && <Button onLoadMore={this.fetchGallery} />}
 
-          {isOpenModal && <Modal />}
+          {showModal && (
+            <Modal imageUrl={modalImageUrl} onCloseModal={this.toggleModal} />
+          )}
         </main>
       </>
     );

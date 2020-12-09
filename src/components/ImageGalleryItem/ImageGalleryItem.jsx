@@ -1,6 +1,10 @@
-export default function ImageGalleryItem({ previewUrl, imageUrl }) {
+export default function ImageGalleryItem({
+  previewUrl,
+  imageUrl,
+  onClickImage,
+}) {
   return (
-    <li className="ImageGalleryItem">
+    <li className="ImageGalleryItem" onClick={e => onClickImage(e)}>
       <img
         src={previewUrl}
         alt=""
