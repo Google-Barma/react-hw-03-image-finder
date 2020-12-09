@@ -1,4 +1,5 @@
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
+import propTypes from 'prop-types';
 
 export default function ImageGallery({ galleryPhotos, onOpenModal }) {
   return (
@@ -14,3 +15,14 @@ export default function ImageGallery({ galleryPhotos, onOpenModal }) {
     </ul>
   );
 }
+
+ImageGallery.propTypes = {
+  onOpenModal: propTypes.func,
+  galleryPhotos: propTypes.arrayOf(
+    propTypes.exact({
+      id: propTypes.number,
+      webformatURL: propTypes.string,
+      largeImageURL: propTypes.string,
+    }),
+  ),
+};

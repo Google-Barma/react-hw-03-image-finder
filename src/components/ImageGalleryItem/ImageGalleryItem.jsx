@@ -1,3 +1,5 @@
+import propTypes from 'prop-types';
+
 export default function ImageGalleryItem({
   previewUrl,
   imageUrl,
@@ -15,3 +17,9 @@ export default function ImageGalleryItem({
     </li>
   );
 }
+
+ImageGalleryItem.propTypes = {
+  previewUrl: propTypes.string,
+  imageUrl: propTypes.string,
+  onClickImage: propTypes.func,
+};

@@ -5,6 +5,7 @@ import ImageGallery from './ImageGallery/ImageGallery';
 import pixabayApi from '../services/pixabay-api';
 import Button from './Button/Button';
 import Modal from './Modal/Modal';
+import Loader from './Loader/Loader';
 
 export default class App extends Component {
   state = {
@@ -13,6 +14,7 @@ export default class App extends Component {
     searchQuery: '',
     showModal: false,
     modalImageUrl: '',
+    isLoading: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -32,18 +34,29 @@ export default class App extends Component {
   fetchGallery = () => {
     const { page, searchQuery } = this.state;
 
-    pixabayApi.fetchGallery(searchQuery, page).then(images => {
-      this.setState(prevState => ({
-        gallery: [...prevState.gallery, ...images],
-        page: prevState.page + 1,
-      }));
-    });
+    this.setState({ isLoading: true });
+
+    pixabayApi
+      .fetchGallery(searchQuery, page)
+      .then(images => {
+        this.setState(({ gallery, page }) => ({
+          gallery: [...gallery, ...images],
+          page: page + 1,
+        }));
+      })
+      .finally(() => this.setState({ isLoading: false }));
   };
 
   handleLoadMoreBtn = () => {
     this.fetchGallery();
 
-    this.setState(prevState => ({ page: prevState.page + 1 }));
+    this.setState(({ page }) => ({
+      page: page + 1,
+    }));
+  };
+
+  isLoaded = () => {
+    this.setState(({ isLoading }) => ({ isLoading: !isLoading }));
   };
 
   handleOpenModal = e => {
@@ -58,6 +71,7 @@ export default class App extends Component {
     this.setState({
       searchQuery: query,
       gallery: [],
+      page: 1,
     });
   };
 
@@ -69,18 +83,22 @@ export default class App extends Component {
   };
 
   render() {
-    const { gallery, showModal, modalImageUrl } = this.state;
+    const { gallery, showModal, modalImageUrl, isLoading } = this.state;
 
     return (
       <>
         <SearchBar onSubmitForm={this.onChangeQuery} />
+
         <main>
           <ImageGallery
             galleryPhotos={gallery}
             onOpenModal={this.handleOpenModal}
           />
+          <Loader isLoading={isLoading} />
 
-          {gallery.length > 0 && <Button onLoadMore={this.fetchGallery} />}
+          {gallery.length > 0 && !isLoading && (
+            <Button onLoadMore={this.fetchGallery} />
+          )}
 
           {showModal && (
             <Modal imageUrl={modalImageUrl} onCloseModal={this.toggleModal} />
