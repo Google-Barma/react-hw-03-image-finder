@@ -29,11 +29,14 @@ export default class QuantityPerPage extends Component {
         <option value="4" name="quantity">
           4
         </option>
-        <option value="6" name="quantity">
-          6
-        </option>
         <option value="8" name="quantity">
           8
+        </option>
+        <option value="12" name="quantity">
+          12
+        </option>
+        <option value="20" name="quantity">
+          20
         </option>
       </select>
     );
