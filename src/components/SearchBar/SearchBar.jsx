@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import propTypes from 'prop-types';
+import QuantityPerPage from '../QuantityPerPage/QuantityPerPage';
 
 export default class SearchBar extends Component {
   state = {
@@ -35,6 +36,7 @@ export default class SearchBar extends Component {
             onChange={e => this.handleChangeQuery(e)}
           />
         </form>
+        <QuantityPerPage onChange={this.props.onChangeQuantity} />
       </header>
     );
   }

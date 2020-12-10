@@ -69,6 +69,7 @@ img {
   background-color: #fff;
   border-radius: 3px;
   overflow: hidden;
+  margin-right: 10px;
 }
 
 .SearchForm-button {
@@ -130,8 +131,7 @@ img {
   margin-bottom: 0;
   padding: 0;
   list-style: none;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto 20px;
 }
 
 /*
@@ -173,15 +173,23 @@ img {
 }
 
 .Modal {
+  position: relative;
   max-width: calc(100vw - 48px);
   max-height: calc(100vh - 24px);
+}
+
+.ModalButtonWrapper {
+  position: absolute;
+  right: -25px;
+  top: -25px;
+  cursor: pointer;
 }
 
 /*
 * Стили компонента Buton (Load more)
 */
 .Button {
-  margin: 0 auto;
+  margin: 0 auto 20px;
   padding: 8px 16px;
   border-radius: 2px;
   background-color: #3f51b5;
@@ -205,4 +213,11 @@ img {
 .Button:hover,
 .Button:focus {
   background-color: #303f9f;
+}
+
+/* select */
+.QuantitySelect {
+  width: 30px;
+  height: 50px;
+  border-radius: 3px;
 }

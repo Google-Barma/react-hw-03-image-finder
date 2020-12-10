@@ -15,6 +15,7 @@ export default class App extends Component {
     showModal: false,
     modalImageUrl: '',
     isLoading: false,
+    quantity: 4,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -25,6 +26,10 @@ export default class App extends Component {
     if (prevState.page !== this.state.page) {
       this.scrollToNextPage();
     }
+
+    if (prevState.quantity !== this.state.quantity && this.state.searchQuery) {
+      this.fetchGallery();
+    }
   }
 
   toggleModal = () => {
@@ -32,12 +37,12 @@ export default class App extends Component {
   };
 
   fetchGallery = () => {
-    const { page, searchQuery } = this.state;
+    const { page, searchQuery, quantity } = this.state;
 
     this.setState({ isLoading: true });
 
     pixabayApi
-      .fetchGallery(searchQuery, page)
+      .fetchGallery(searchQuery, page, quantity)
       .then(images => {
         this.setState(({ gallery, page }) => ({
           gallery: [...gallery, ...images],
@@ -53,10 +58,6 @@ export default class App extends Component {
     this.setState(({ page }) => ({
       page: page + 1,
     }));
-  };
-
-  isLoaded = () => {
-    this.setState(({ isLoading }) => ({ isLoading: !isLoading }));
   };
 
   handleOpenModal = e => {
@@ -75,6 +76,8 @@ export default class App extends Component {
     });
   };
 
+  onChangeQuantity = value => this.setState({ quantity: value });
+
   scrollToNextPage = () => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
@@ -87,7 +90,10 @@ export default class App extends Component {
 
     return (
       <>
-        <SearchBar onSubmitForm={this.onChangeQuery} />
+        <SearchBar
+          onSubmitForm={this.onChangeQuery}
+          onChangeQuantity={this.onChangeQuantity}
+        />
 
         <main>
           <ImageGallery

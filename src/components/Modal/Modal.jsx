@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { createPortal } from 'react-dom';
+import { AiOutlineCloseCircle } from 'react-icons/ai';
 
 const modalRoot = document.querySelector('#modal-root');
 
@@ -28,11 +29,14 @@ export default class Modal extends Component {
     return createPortal(
       <div className="Overlay" onClick={e => this.handleBackDropClick(e)}>
         <div className="Modal">
+          <div
+            className="ModalButtonWrapper"
+            onClick={() => this.props.onCloseModal()}
+          >
+            <AiOutlineCloseCircle color="white" size="25px" />
+          </div>
           <img src={this.props.imageUrl} alt="" />
         </div>
-        <button type="button" onClick={() => this.props.onCloseModal()}>
-          Close
-        </button>
       </div>,
       modalRoot,
     );
