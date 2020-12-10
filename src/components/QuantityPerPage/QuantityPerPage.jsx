@@ -3,12 +3,14 @@ import propTypes from 'prop-types';
 
 export default class QuantityPerPage extends Component {
   state = {
-    value: 4,
+    value: 8,
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.value !== this.state.value) {
-      this.props.onChange(this.state.value);
+    const { value } = this.state;
+
+    if (prevState.value !== value) {
+      this.props.onChange(value);
     }
   }
 

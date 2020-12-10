@@ -15,19 +15,21 @@ export default class App extends Component {
     showModal: false,
     modalImageUrl: '',
     isLoading: false,
-    quantity: 4,
+    quantity: 8,
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchQuery !== this.state.searchQuery) {
+    const { page, searchQuery, quantity } = this.state;
+
+    if (prevState.searchQuery !== searchQuery) {
       this.fetchGallery();
     }
 
-    if (prevState.page !== this.state.page) {
+    if (prevState.page !== page) {
       this.scrollToNextPage();
     }
 
-    if (prevState.quantity !== this.state.quantity && this.state.searchQuery) {
+    if (prevState.quantity !== quantity && searchQuery) {
       this.fetchGallery();
     }
   }
@@ -64,7 +66,6 @@ export default class App extends Component {
     const url = e.target.dataset.url;
 
     this.toggleModal();
-
     this.setState({ modalImageUrl: url });
   };
 
@@ -94,7 +95,6 @@ export default class App extends Component {
           onSubmitForm={this.onChangeQuery}
           onChangeQuantity={this.onChangeQuantity}
         />
-
         <main>
           <ImageGallery
             galleryPhotos={gallery}
